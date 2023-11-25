@@ -8,8 +8,8 @@ from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader
 
 
-def get_dataloaders(batch_size):
-    df = pd.read_csv("housing.csv")
+def get_dataloaders(dataset_path):
+    df = pd.read_csv(dataset_path)
     df.fillna(df["total_bedrooms"].mode().values[0], inplace=True)
 
     part = ["train"] * 13209 + ["val"] * 3303 + ["test"] * 4128
@@ -61,12 +61,9 @@ def get_dataloaders(batch_size):
     y_test = torch.as_tensor(y_test, dtype=torch.float32)
 
     dataset_train = TensorDataset(x_train, y_train)
-    loader_train = DataLoader(dataset_train, batch_size=batch_size, shuffle=True)
 
     dataset_val = TensorDataset(x_val, y_val)
-    loader_val = DataLoader(dataset_val, batch_size=batch_size, shuffle=False)
 
     dataset_test = TensorDataset(x_test, y_test)
-    loader_test = DataLoader(dataset_test, batch_size=batch_size, shuffle=False)
 
-    return loader_train, loader_val, loader_test
+    return dataset_train, dataset_val, dataset_test
